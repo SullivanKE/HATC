@@ -8,8 +8,13 @@ namespace HATC.Models
         [Key]
         public int UserId { get; set; }
         public string UserName { get; set; }
-
-        public IEnumerable<Character> Characters { get; set;}
+        public enum RoleType
+        {
+            Player,
+            DM
+        }
+        public RoleType Role { get; set; }
+        public List<Character> Characters { get; set;}
 
     }
 }

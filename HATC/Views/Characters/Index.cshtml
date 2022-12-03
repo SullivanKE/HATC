@@ -1,0 +1,46 @@
+﻿@model IEnumerable<HATC.Models.User>
+
+@{
+    ViewData["Title"] = "Index";
+    List<User> users = ViewData["UserNames"] as List<User>;
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Player
+            </th>
+            <th>
+                Character
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var user in Model) 
+{
+    foreach (var character in user.Characters)
+    {
+        <tr>
+            <td>
+                @user.UserName
+            </td>
+            <td>
+                @character.Name
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@character.CharacterId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@character.CharacterId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@character.CharacterId">Delete</a>
+            </td>
+        </tr>
+    }
+}
+    </tbody>
+</table>

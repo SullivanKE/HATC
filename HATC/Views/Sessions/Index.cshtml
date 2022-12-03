@@ -1,0 +1,47 @@
+﻿@model IEnumerable<HATC.Models.Session>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DM)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InGameDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SessionDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DM)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InGameDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SessionDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SessionId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SessionId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SessionId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,52 @@
+﻿@model HATC.Models.Character
+
+@{
+    ViewData["Title"] = "Edit";
+    List<User> users = ViewData["UserNames"] as List<User>;
+    User user = ViewData["User"] as User;
+}
+
+<h1>Edit</h1>
+
+<h4>Character</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label for="userId" name="userId" class="control-label">Player</label>
+                <select id="UserSelect" for="userId" name="userId" class="form-control">
+                    @foreach (User u in users)
+                    {
+                        if (u.UserId != user.UserId)
+                        {
+                            <option value="@u.UserId" label="@u.UserName">@u.UserName</option>
+                        }
+                        else
+                        {
+                            <option value="@u.UserId" label="@u.UserName" selected>@u.UserName</option>
+                        }
+                    }
+                </select>
+            </div>
+            <input type="hidden" asp-for="CharacterId" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

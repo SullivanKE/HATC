@@ -14,6 +14,6 @@ namespace HATC.Models
         public IEnumerable<User> Users { get; set; }
         public IEnumerable<SessionItem> SessionItems {get; set;}
         public IEnumerable<Monster> Monsters { get; set; }
-
+        public DateTime Date { get; set; }
     }
 }

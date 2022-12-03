@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace HATC.Models
 {
@@ -7,5 +9,6 @@ namespace HATC.Models
         [Key]
         public int CharacterId { get; set; }
         public string Name { get; set; }
+
     }
 }

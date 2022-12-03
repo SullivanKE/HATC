@@ -1,0 +1,31 @@
+﻿@model HATC.Models.Character
+
+@{
+    ViewData["Title"] = "Details";
+    User user = ViewData["User"] as User;
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Character</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Player
+        </dt>
+        <dd class="col-sm-10">
+            @user.UserName
+        </dd>
+        <dt class="col-sm-2">
+            Character Name
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CharacterId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
