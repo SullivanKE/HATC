@@ -43,7 +43,7 @@ namespace HATC.Controllers
             return View(session);
         }
 
-        // GET: Sessions/Create
+       /* // GET: Sessions/Create
         public IActionResult Create()
         {
             return View();
@@ -63,7 +63,7 @@ namespace HATC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(session);
-        }
+        }*/
 
         // GET: Sessions/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -151,14 +151,21 @@ namespace HATC.Controllers
         }
 
 
-        public IActionResult Add()
+        public IActionResult Create()
         {
             Session s = new Session();
+            List<User> u = new List<User>();
+            List<SessionItem> si = new List<SessionItem>();
+            List<Monster> m = new List<Monster>();
+
+            s.Users = u;
+            s.SessionItems = si;
+            s.Monsters = m;
             this.Data();
             return View(s);
         }
         [HttpPost]
-        public IActionResult Add(Session s)
+        public IActionResult Create(Session s)
         {
             s.Date = DateTime.Now;
             _context.Sessions.Add(s);
@@ -177,7 +184,6 @@ namespace HATC.Controllers
         [Route("DelAdhoc/{index}")]
         public IActionResult DelAdhoc(int index, Session s)
         {
-
             s.SessionItems.ToList().RemoveAt(index);
             ModelState.Clear();
             this.Data();

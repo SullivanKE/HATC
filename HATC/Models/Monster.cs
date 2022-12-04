@@ -10,7 +10,7 @@ namespace HATC.Models
         public string Name { get; set; } = "";
 
         // This will be used later for getting the experience
-/*        public static Dictionary<string, int> CrDict { get; } = new Dictionary<string, int> {
+        public static Dictionary<string, int> CrDict { get; } = new Dictionary<string, int> {
             {"0 (Trivial)",0},
             {"0",10},
             {"1/8",25},
@@ -46,7 +46,7 @@ namespace HATC.Models
             {"28",120000},
             {"29",135000},
             {"30",155000}
-        };*/
+        };
 
         public string Cr { get; set; }
         public int Count { get; set; }

@@ -6,13 +6,13 @@ namespace HATC.Models
     {
         [Key]
         public int SessionItemId { get; set; }
-        public string ItemName { get; set; }
+        public string ItemName { get; set; } = "";
         public int Value { get; set; }
         public enum ItemType
         {
             Adhoc,
             Item
         }
-        public ItemType Type { get; set; }
+        public ItemType Type { get; set; } = ItemType.Adhoc;
     }
 }
