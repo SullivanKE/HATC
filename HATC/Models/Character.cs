@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
@@ -9,6 +10,7 @@ namespace HATC.Models
         [Key]
         public int CharacterId { get; set; }
         public string Name { get; set; }
+        public User Player { get; set; }
 
     }
 }

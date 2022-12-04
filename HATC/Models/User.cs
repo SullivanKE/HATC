@@ -14,7 +14,6 @@ namespace HATC.Models
             DM
         }
         public RoleType Role { get; set; }
-        public List<Character> Characters { get; set;}
 
     }
 }

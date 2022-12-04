@@ -22,28 +22,23 @@ namespace HATC.Controllers
         // GET: Characters
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.Include(c => c.Characters).ToListAsync());
+            return View(await _context.Characters
+                .Include(c => c.Player)
+                .ToListAsync());
         }
 
         // GET: Characters/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            List<User> users = _context.Users
-                .Include(c => c.Characters)
-                .ToList();
-
-            foreach (User u in users)
-                foreach (Character c in u.Characters)
-                    if (c.CharacterId == id)
-                        ViewData["User"] = u;
-
             if (id == null)
             {
                 return NotFound();
             }
 
             var character = await _context.Characters
+                .Include(c => c.Player)
                 .FirstOrDefaultAsync(m => m.CharacterId == id);
+
             if (character == null)
             {
                 return NotFound();
@@ -56,7 +51,7 @@ namespace HATC.Controllers
         public IActionResult Create()
         {
             List<User> users = _context.Users
-                .Include(c => c.Characters)
+                .OrderBy(u => u.UserName)
                 .ToList();
             ViewData["UserNames"] = users;
             return View();
@@ -69,22 +64,10 @@ namespace HATC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CharacterId,Name")] Character character, int userId)
         {
-            // Get list of users and send it as UserNames
-            List<User> users = _context.Users
-                .Include(c => c.Characters)
-                .ToList();
-            ViewData["UserNames"] = users;
-
-            // Get a single user. This is the user we want the character to belong to from the form
-            User user = _context.Users.Where(u => u.UserId == userId)
-                .Include(c => c.Characters)
-                .SingleOrDefault();
-
-            
-            if (ModelState.IsValid && user != null)
+            if (ModelState.IsValid)
             {
+                character.Player = _context.Users.Find(userId);
                 _context.Add(character);
-                user.Characters.Add(character);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -96,14 +79,9 @@ namespace HATC.Controllers
         {
             // Get list of users and send it as UserNames
             List<User> users = _context.Users
-                .Include(c => c.Characters)
+                .OrderBy(u => u.UserName)
                 .ToList();
             ViewData["UserNames"] = users;
-
-            foreach (User u in users)
-                foreach (Character c in u.Characters)
-                    if (c.CharacterId == id)
-                        ViewData["User"] = u;
                                     
 
             if (id == null)
@@ -126,7 +104,12 @@ namespace HATC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CharacterId,Name")] Character character, int userId)
         {
-            
+            // Get list of users and send it as UserNames
+            List<User> users = _context.Users
+                .OrderBy(u => u.UserName)
+                .ToList();
+
+            ViewData["UserNames"] = users;
 
             if (id != character.CharacterId)
             {
@@ -139,35 +122,8 @@ namespace HATC.Controllers
                 {
 
                     _context.Characters.Update(character);
-                    await _context.SaveChangesAsync(); // TODO: The instance of entity type 'Item' cannot be tracked because another instance with the same key value for {'Id'} is already being tracked
+                    await _context.SaveChangesAsync(); 
 
-                    // Get list of users and send it as UserNames
-                    List<User> users = _context.Users
-                        .Include(c => c.Characters)
-                        .ToList();
-                    ViewData["UserNames"] = users;
-                    
-
-                    // Find one user from that list. This is the user we are changing the character to
-                    User user = users.Find(u => u.UserId == userId);
-                    ViewData["User"] = user;
-
-                    // We look by the ID because the other information might be different
-                    int i = user.Characters.FindIndex(c => c.CharacterId == character.CharacterId);
-                    if (i < 0)
-                    {
-                        foreach (User u in users)
-                        {
-                            int j = user.Characters.FindIndex(c => c.CharacterId == character.CharacterId);
-                            if (j >= 0)
-                            {
-                                u.Characters.RemoveAt(j);
-                            }
-                        }
-                        user.Characters.Add(character);
-                        await _context.SaveChangesAsync();
-                    }
-                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {

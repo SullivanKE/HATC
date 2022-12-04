@@ -86,7 +86,7 @@ namespace HATC.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SessionId,DM,InGameDate,SessionDate")] Session session)
+        public async Task<IActionResult> Edit(int id, Session session)
         {
             if (id != session.SessionId)
             {
@@ -154,6 +154,9 @@ namespace HATC.Controllers
         public IActionResult Create()
         {
             Session s = new Session();
+            //s.SessionId = _context.Sessions.OrderByDescending(s => s.SessionId).FirstOrDefault().SessionId + 1;
+            s.SessionId = 0;
+
             this.Data();
             return View(s);
         }
@@ -170,7 +173,9 @@ namespace HATC.Controllers
 
         public IActionResult AddAdhoc(Session s)
         {
-            s.SessionItems.Add(new SessionItem());
+            SessionItem si = new SessionItem();
+            si.Type = SessionItem.ItemType.Adhoc;
+            s.SessionItems.Add(si);
             this.Data();
             return View("Create", s);
         }
@@ -180,7 +185,23 @@ namespace HATC.Controllers
         {
             
             s.SessionItems.RemoveAt(index);
-            ModelState.Clear();
+            this.Data();
+            return View("Create", s);
+        }
+        public IActionResult AddItem(Session s)
+        {
+            SessionItem si = new SessionItem();
+            si.Type = SessionItem.ItemType.Item;
+            s.SessionItems.Add(si);
+            this.Data();
+            return View("Create", s);
+        }
+
+        [Route("DelAdhoc/{index}")]
+        public IActionResult DelItem(int index, Session s)
+        {
+
+            s.SessionItems.RemoveAt(index);
             this.Data();
             return View("Create", s);
         }
@@ -195,7 +216,6 @@ namespace HATC.Controllers
         public IActionResult DelMonster(int index, Session s)
         {
             s.Monsters.RemoveAt(index);
-            ModelState.Clear();
             this.Data();
             return View("Create", s);
         }
@@ -204,6 +224,8 @@ namespace HATC.Controllers
             ViewData["DMs"] = _context.Users.Where(u => u.Role == Models.User.RoleType.DM).ToList();
             ViewData["Users"] = _context.Users.OrderBy(u => u.UserName).ToList();
             ViewData["Characters"] = _context.Characters.OrderBy(c => c.Name).ToList();
+
+            ModelState.Clear();
         }
 
     }

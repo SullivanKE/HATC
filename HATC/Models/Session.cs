@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,7 +12,7 @@ namespace HATC.Models
         public string DM { get; set; }
         public string InGameDate { get; set; }
         public DateTime SessionDate { get; set; }
-        public List<User> Users { get; set; } = new List<User>();
+        public Character[] Characters { get; set; } = new Character[6];
         public List<SessionItem> SessionItems {get; set;} = new List<SessionItem>();
         public List<Monster> Monsters { get; set; } = new List<Monster>();
     }
