@@ -176,9 +176,11 @@ namespace HATC.Controllers
 
         public IActionResult AddAdhoc(Session s)
         {
+            if (s.SessionItems == null)
+                s.SessionItems = new List<SessionItem>();
             s.SessionItems.ToList().Add(new SessionItem());
             this.Data();
-            return View("Add", s);
+            return View("Create", s);
         }
 
         [Route("DelAdhoc/{index}")]
@@ -187,13 +189,15 @@ namespace HATC.Controllers
             s.SessionItems.ToList().RemoveAt(index);
             ModelState.Clear();
             this.Data();
-            return View("Add", s);
+            return View("Create", s);
         }
         public IActionResult AddMonster(Session s)
         {
+            if (s.Monsters == null)
+                s.Monsters = new List<Monster>();
             s.Monsters.ToList().Add(new Monster());
             this.Data();
-            return View("Add", s);
+            return View("Create", s);
         }
 
         [Route("DelMonster/{index}")]
@@ -202,7 +206,7 @@ namespace HATC.Controllers
             s.Monsters.ToList().RemoveAt(index);
             ModelState.Clear();
             this.Data();
-            return View("Add", s);
+            return View("Create", s);
         }
         private void Data()
         {
