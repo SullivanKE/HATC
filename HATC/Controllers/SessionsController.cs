@@ -168,7 +168,7 @@ namespace HATC.Controllers
             _context.Sessions.Add(s);
             _context.SaveChanges();
 
-            return View("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult AddAdhoc(Session s)
