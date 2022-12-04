@@ -3,16 +3,8 @@
     ViewData["Title"] = "Add";
     List<User> DMs = ViewData["DMs"] as List<User>;
     List<User> users = ViewData["Users"] as List<User>;
-    List<Character> characters = ViewData["Characters"] as List<Character>; // TODO: Null value
+    List<Character> characters = ViewData["Characters"] as List<Character>;
 
-    if (Model.Users == null)
-        Model.Users = new List<User>();
-
-    if (Model.Monsters == null)
-        Model.Monsters = new List<Monster>();
-
-    if (Model.SessionItems == null)
-        Model.SessionItems = new List<SessionItem>();
 }
 
 <h1 class="jumbotron">Add</h1>
@@ -46,7 +38,7 @@
 
             <div class="form-group">
                 <p class="h3">Characters</p>
-                @for (int i = 0; i < Model.Users.Count(); i++) // TODO: Null value here too
+                @for (int i = 0; i < Model.Users.Count(); i++)
                 {
 
                     <div class="row align-items-end">

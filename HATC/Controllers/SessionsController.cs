@@ -154,16 +154,10 @@ namespace HATC.Controllers
         public IActionResult Create()
         {
             Session s = new Session();
-            List<User> u = new List<User>();
-            List<SessionItem> si = new List<SessionItem>();
-            List<Monster> m = new List<Monster>();
-
-            s.Users = u;
-            s.SessionItems = si;
-            s.Monsters = m;
             this.Data();
             return View(s);
         }
+
         [HttpPost]
         public IActionResult Create(Session s)
         {
@@ -176,8 +170,6 @@ namespace HATC.Controllers
 
         public IActionResult AddAdhoc(Session s)
         {
-            if (s.SessionItems == null)
-                s.SessionItems = new List<SessionItem>();
             s.SessionItems.ToList().Add(new SessionItem());
             this.Data();
             return View("Create", s);
@@ -193,8 +185,6 @@ namespace HATC.Controllers
         }
         public IActionResult AddMonster(Session s)
         {
-            if (s.Monsters == null)
-                s.Monsters = new List<Monster>();
             s.Monsters.ToList().Add(new Monster());
             this.Data();
             return View("Create", s);
