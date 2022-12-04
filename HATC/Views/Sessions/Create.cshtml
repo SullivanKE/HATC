@@ -43,8 +43,8 @@
 
                     <div class="row align-items-end">
                         <div class="col">
-                            <label asp-for="Users.ToList()[i].Characters[0]" class="control-label">Character Name</label>
-                            <select asp-for="Users.ToList()[i].Characters[0]" class="form-control">
+                            <label asp-for="Users[i].Characters[0]" class="control-label">Character Name</label>
+                            <select asp-for="Users[i].Characters[0]" class="form-control">
                                 @foreach(Character character in characters)
                                 {
                                     <option value="@character">@character.Name</option>
@@ -52,8 +52,8 @@
                             </select>
                         </div>
                         <div class="col">
-                            <label asp-for="Users.ToList()[i]" class="control-label">Player Name</label>
-                            <select asp-for="Users.ToList()[i]" class="form-control">
+                            <label asp-for="Users[i]" class="control-label">Player Name</label>
+                            <select asp-for="Users[i]" class="form-control">
                                 @foreach(User user in users)
                                 {
                                     <option value="@user">@user.UserName</option>
@@ -71,16 +71,16 @@
 
             <div class="form-group">
                 <p class="h3">Ad-hoc Experience</p>
-                @for (int i = 0; i < Model.SessionItems.ToList().Count; i++)
+                @for (int i = 0; i < Model.SessionItems.Count; i++)
                 {
                     <div class="row align-items-end">
                         <div class="col">
-                            <label asp-for="SessionItems.ToList()[i].ItemName" class="control-label">Adhoc Name</label>
-                            <input asp-for="SessionItems.ToList()[i].ItemName" class="form-control" />
+                            <label asp-for="SessionItems[i].ItemName" class="control-label">Adhoc Name</label>
+                            <input asp-for="SessionItems[i].ItemName" class="form-control" />
                         </div>
                         <div class="col">
-                            <label asp-for="SessionItems.ToList()[i].Value" class="control-label">Experience</label>
-                            <input asp-for="SessionItems.ToList()[i].Value" class="form-control" />
+                            <label asp-for="SessionItems[i].Value" class="control-label">Experience</label>
+                            <input asp-for="SessionItems[i].Value" class="form-control" />
                         </div>
                         <div class="col">
                             <input method="post" type="submit" class="btn btn-danger btn-sm" value="-" asp-route-index="@i" asp-action="DelAdhoc" />
@@ -93,16 +93,16 @@
 
             <div class="form-group">
                 <p class="h3">Combat Experience</p>
-                @for (int i = 0; i < Model.Monsters.ToList().Count; i++)
+                @for (int i = 0; i < Model.Monsters.Count; i++)
                 {
                     <div class="row align-items-end">
                         <div class="col">
-                            <label asp-for="Monsters.ToList()[i].Name" class="control-label">Monster</label>
-                            <input asp-for="Monsters.ToList()[i].Name" class="form-control" />
+                            <label asp-for="Monsters[i].Name" class="control-label">Monster</label>
+                            <input asp-for="Monsters[i].Name" class="form-control" />
                         </div>
                         <div class="col">
-                            <label asp-for="Monsters.ToList()[i].Cr" class="control-label">CR</label>
-                            <select asp-for="Monsters.ToList()[i].Cr" class="form-control">
+                            <label asp-for="Monsters[i].Cr" class="control-label">CR</label>
+                            <select asp-for="Monsters[i].Cr" class="form-control">
                             @foreach(string key in Monster.CrDict.Keys)
                             {
                                 <option value="@key">@key</option>
@@ -110,8 +110,8 @@
                             </select>
                         </div>
                         <div class="col">
-                            <label asp-for="Monsters.ToList()[i].Count" class="control-label">Count</label>
-                            <input asp-for="Monsters.ToList()[i].Count" class="form-control"  />
+                            <label asp-for="Monsters[i].Count" class="control-label">Count</label>
+                            <input asp-for="Monsters[i].Count" class="form-control"  />
                         </div>
 
                         <div class="col">

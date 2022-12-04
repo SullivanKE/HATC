@@ -161,7 +161,7 @@ namespace HATC.Controllers
         [HttpPost]
         public IActionResult Create(Session s)
         {
-            s.Date = DateTime.Now;
+            s.SessionDate = DateTime.Now;
             _context.Sessions.Add(s);
             _context.SaveChanges();
 
@@ -170,7 +170,7 @@ namespace HATC.Controllers
 
         public IActionResult AddAdhoc(Session s)
         {
-            s.SessionItems.ToList().Add(new SessionItem());
+            s.SessionItems.Add(new SessionItem());
             this.Data();
             return View("Create", s);
         }
@@ -178,14 +178,15 @@ namespace HATC.Controllers
         [Route("DelAdhoc/{index}")]
         public IActionResult DelAdhoc(int index, Session s)
         {
-            s.SessionItems.ToList().RemoveAt(index);
+            
+            s.SessionItems.RemoveAt(index);
             ModelState.Clear();
             this.Data();
             return View("Create", s);
         }
         public IActionResult AddMonster(Session s)
         {
-            s.Monsters.ToList().Add(new Monster());
+            s.Monsters.Add(new Monster());
             this.Data();
             return View("Create", s);
         }
@@ -193,7 +194,7 @@ namespace HATC.Controllers
         [Route("DelMonster/{index}")]
         public IActionResult DelMonster(int index, Session s)
         {
-            s.Monsters.ToList().RemoveAt(index);
+            s.Monsters.RemoveAt(index);
             ModelState.Clear();
             this.Data();
             return View("Create", s);
