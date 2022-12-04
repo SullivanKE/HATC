@@ -34,6 +34,9 @@ namespace HATC.Controllers
             }
 
             var session = await _context.Sessions
+                .Include(s => s.Characters)
+                .Include(s => s.SessionItems)
+                .Include(s => s.Monsters)
                 .FirstOrDefaultAsync(m => m.SessionId == id);
             if (session == null)
             {
@@ -139,7 +142,11 @@ namespace HATC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var session = await _context.Sessions.FindAsync(id);
+            var session = await _context.Sessions
+				.Include(s => s.SessionItems)
+				.Include(s => s.Monsters)
+				.Include(s => s.Characters)
+				.SingleOrDefaultAsync(s => s.SessionId == id);
             _context.Sessions.Remove(session);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -154,9 +161,12 @@ namespace HATC.Controllers
         public IActionResult Create()
         {
             Session s = new Session();
-            //s.SessionId = _context.Sessions.OrderByDescending(s => s.SessionId).FirstOrDefault().SessionId + 1;
-            s.SessionId = 0;
-
+            // We want to show the person making the session the session number. This is so it doesn't explode when we have an empty database
+            List<Session> sessions = _context.Sessions.OrderByDescending(s => s.SessionId).ToList();
+            if (sessions.Count == 0)
+                s.SessionId = 1;
+            else
+                s.SessionId = sessions.Last().SessionId;
             this.Data();
             return View(s);
         }
@@ -165,6 +175,7 @@ namespace HATC.Controllers
         public IActionResult Create(Session s)
         {
             s.SessionDate = DateTime.Now;
+            s.SessionId = new int(); // Clear the session Id and let the database take it from here
             _context.Sessions.Add(s);
             _context.SaveChanges();
 

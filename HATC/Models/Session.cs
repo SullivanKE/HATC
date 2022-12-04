@@ -12,7 +12,7 @@ namespace HATC.Models
         public string DM { get; set; }
         public string InGameDate { get; set; }
         public DateTime SessionDate { get; set; }
-        public Character[] Characters { get; set; } = new Character[6];
+        public List<Character> Characters { get; set; } = new List<Character>();
         public List<SessionItem> SessionItems {get; set;} = new List<SessionItem>();
         public List<Monster> Monsters { get; set; } = new List<Monster>();
     }

@@ -1,36 +1,253 @@
 ﻿@model HATC.Models.Session
 
 @{
-    ViewData["Title"] = "Details";
+	ViewData["Title"] = "Details";
+	double adhocTotal = 0;
+	double combatTotal = 0;
+	double goldTotal = 0;
 }
 
 <h1>Details</h1>
 
 <div>
-    <h4>Session</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DM)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DM)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.InGameDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InGameDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SessionDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SessionDate)
-        </dd>
-    </dl>
+	<h4>Session @Model.SessionId</h4>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.DM)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.DM)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.InGameDate)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.InGameDate)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.SessionDate)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.SessionDate)
+		</dd>
+	</dl>
+
+	<hr />
+	<h3>Characters</h3>
+	<dl class="row">
+		@foreach (Character c in Model.Characters)
+		{
+			<dt class="col-sm-2">
+				Player
+			</dt>
+			<dd class="col-sm-10">
+				@c.Player.UserName
+			</dd>
+			<dt class="col-sm-2">
+				Character
+			</dt>
+			<dd class="col-sm-10">
+				@c.Name
+			</dd>
+		}
+	</dl>
+
+	<hr />
+	<div class="container">
+		<h3>AdHoc Experience</h3>
+		<table class="table border-dark table-striped table-sm table-bordered">
+			<thead class="thead-dark">
+				<tr>
+					<th class="col-sm-2">Exp Name</th>
+					<th class="col-sm-2">Exp Amount</th>
+					<th class="col-sm-2">Exp Per Player</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				@foreach (SessionItem si in Model.SessionItems)
+				{
+					if (si.Type == SessionItem.ItemType.Adhoc)
+					{
+						<tr>
+							<td>
+								@si.ItemName
+							</td>
+							<td>
+								@si.Value
+							</td>
+							<td>
+								@Math.Ceiling(si.Value / 6.0)
+							</td>
+						</tr>
+						{ // Get a running total of all experience
+							adhocTotal += si.Value;
+						}
+					}
+
+				}
+			</tbody>
+		</table>
+		<dl class="row">
+			<dt class="col-sm-2">
+				Exp Total
+			</dt>
+			<dd class="col-sm-10">
+				@adhocTotal
+			</dd>
+			<dt class="col-sm-2">
+				Exp Total Split
+			</dt>
+			<dd class="col-sm-10">
+				@Math.Ceiling(adhocTotal / 6)
+			</dd>
+		</dl>
+	</div>
+	<hr />
+
+	<div class="container">
+		<h3>Combat Experience</h3>
+		<table class="table border-dark table-striped table-sm table-bordered">
+			<thead class="thead-dark">
+				<tr>
+					<th class="col-sm-2">Creature Name</th>
+					<th class="col-sm-2">CR Amount</th>
+					<th class="col-sm-2">Experience</th>
+					<th class="col-sm-2">Exp Per Player</th>
+				</tr>
+			</thead>
+			<tbody>
+
+
+				@foreach (Monster m in Model.Monsters)
+				{
+					<tr>
+						<td>
+							@m.Name
+						</td>
+						<td>
+							@m.Cr
+						</td>
+						<td>
+							@Monster.CrDict[m.Cr]
+						</td>
+						<td>
+							@Math.Ceiling(Monster.CrDict[m.Cr] / 6.0)
+						</td>
+					</tr>
+					{ // get all the experience from the monsters
+						combatTotal += Monster.CrDict[m.Cr];
+					}
+				}
+			</tbody>
+		</table>
+
+		<dl class="row">
+			<dt class="col-sm-2">
+				Combat Exp Total
+			</dt>
+			<dd class="col-sm-10">
+				@combatTotal
+			</dd>
+			<dt class="col-sm-2">
+				Combat Exp Split
+			</dt>
+			<dd class="col-sm-10">
+				@Math.Ceiling(combatTotal / 6)
+			</dd>
+		</dl>
+	</div>
+	<hr />
+
+	<div class="container">
+		<h3>Items</h3>
+		<table class="table border-dark table-striped table-sm table-bordered">
+			<thead class="thead-dark">
+				<tr>
+					<th class="col-sm-2">Item Name</th>
+					<th class="col-sm-2">Gold Amount</th>
+					<th class="col-sm-2">Gold Per Player</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (SessionItem si in Model.SessionItems)
+				{
+					if (si.Type == SessionItem.ItemType.Item)
+					{
+						<tr>
+							<td>
+								@si.ItemName
+							</td>
+
+							<td>
+								@si.Value
+							</td>
+
+							<td>
+								@Math.Round(si.Value / 6.0, 2, MidpointRounding.ToPositiveInfinity)
+							</td>
+						</tr>
+						{ // Get a running total of all gold
+							goldTotal += si.Value;
+						}
+					}
+
+				}
+			</tbody>
+		</table>
+		<dl>
+			<dt class="col-sm-2">
+				Gold Total
+			</dt>
+			<dd class="col-sm-10">
+				@goldTotal
+			</dd>
+			<dt class="col-sm-2">
+				Gold Total Split
+			</dt>
+			<dd class="col-sm-10">
+				@Math.Round(goldTotal / 6, 2, MidpointRounding.ToPositiveInfinity)
+			</dd>
+		</dl>
+	</div>
+
+	<div class="container">
+		<h3>Final Totals</h3>
+		@{
+			double expTotal = adhocTotal + combatTotal;
+		}
+		<dl class="row">
+
+			<dt class="col-sm-2">
+				Experience
+			</dt>
+			<dd class="col-sm-10">
+				@expTotal
+			</dd>
+			<dt class="col-sm-2">
+				Experience per Player
+			</dt>
+			<dd class="col-sm-10">
+				@Math.Ceiling(expTotal / 6)
+			</dd>
+			<dt class="col-sm-2">
+				Gold
+			</dt>
+			<dd class="col-sm-10">
+				@goldTotal
+			</dd>
+			<dt class="col-sm-2">
+				Gold per Player
+			</dt>
+			<dd class="col-sm-10">
+				@Math.Ceiling(goldTotal / 6)
+			</dd>
+
+		</dl>
+	</div>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.SessionId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+	<a asp-action="Edit" asp-route-id="@Model.SessionId">Edit</a> |
+	<a asp-action="Index">Back to List</a>
 </div>

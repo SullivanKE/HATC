@@ -6,8 +6,8 @@
     List<Character> characters = ViewData["Characters"] as List<Character>;
 
     // For some reason it keeps deleting my array? This is a hard fix, not optimal but it works
-    if (Model.Characters.Length == 0)
-        Model.Characters = new Character[6];
+    if (Model.Characters.Count == 0)
+        Model.Characters = new List<Character>(new Character[6]);
 
 }
 
@@ -20,7 +20,7 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="SessionId" class="control-label"></label>
+                <label asp-for="SessionId" class="control-label">Session #</label>
                 <input asp-for="SessionId" class="form-control" readonly/>
                 <span asp-validation-for="SessionId" class="text-danger"></span>
             </div>
@@ -42,7 +42,7 @@
 
             <div class="form-group">
                 <p class="h3">Characters</p>
-                @for (int i = 0; i < Model.Characters.Length; i++)
+                @for (int i = 0; i < Model.Characters.Count; i++)
                 {
                     <div class="row align-items-end">
                         <div class="col">
