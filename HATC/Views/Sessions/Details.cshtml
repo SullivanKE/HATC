@@ -113,6 +113,7 @@
 				<tr>
 					<th class="col-sm-2">Creature Name</th>
 					<th class="col-sm-2">CR Amount</th>
+					<th class="col-sm-2">Count</th>
 					<th class="col-sm-2">Experience</th>
 					<th class="col-sm-2">Exp Per Player</th>
 				</tr>
@@ -130,14 +131,17 @@
 							@m.Cr
 						</td>
 						<td>
-							@Monster.CrDict[m.Cr]
+							@m.Count
 						</td>
 						<td>
-							@Math.Ceiling(Monster.CrDict[m.Cr] / 6.0)
+							@(Monster.CrDict[m.Cr] * m.Count)
+						</td>
+						<td>
+							@Math.Ceiling(Monster.CrDict[m.Cr] * m.Count / 6.0)
 						</td>
 					</tr>
 					{ // get all the experience from the monsters
-						combatTotal += Monster.CrDict[m.Cr];
+						combatTotal += Monster.CrDict[m.Cr] * m.Count;
 					}
 				}
 			</tbody>

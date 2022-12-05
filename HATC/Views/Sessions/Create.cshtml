@@ -20,11 +20,6 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="SessionId" class="control-label">Session #</label>
-                <input asp-for="SessionId" class="form-control" readonly/>
-                <span asp-validation-for="SessionId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="DM" class="control-label"></label>
                 <select asp-for="DM" class="form-control">
                     @foreach(User u in DMs)
@@ -46,11 +41,11 @@
                 {
                     <div class="row align-items-end">
                         <div class="col">
-                            <label asp-for="@Model.Characters[i]" class="control-label">Character Name</label>
-                            <select asp-for="@Model.Characters[i]" class="form-control">
+                            <label asp-for="@Model.Characters[i].CharacterId" class="control-label">Character Name</label>
+                            <select asp-for="@Model.Characters[i].CharacterId" class="form-control">
                                 @foreach(Character character in characters)
                                 {
-                                    <option value="@character">@character.Name</option>
+                                    <option value="@character.CharacterId">@character.Name</option>
                                 }
                             </select>
                         </div>
