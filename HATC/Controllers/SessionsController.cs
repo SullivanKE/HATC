@@ -72,12 +72,20 @@ namespace HATC.Controllers
         // GET: Sessions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
+            this.Data();
             if (id == null)
             {
                 return NotFound();
             }
 
-            var session = await _context.Sessions.FindAsync(id);
+            var session = await _context.Sessions
+                .Include(s => s.SessionItems)
+                .Include(s => s.Monsters)
+                .Include(s => s.Characters)
+                .ThenInclude(c => c.Player)
+                .SingleOrDefaultAsync(s => s.SessionId == id);
+
             if (session == null)
             {
                 return NotFound();
@@ -92,15 +100,17 @@ namespace HATC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Session session)
         {
-            if (id != session.SessionId)
-            {
-                return NotFound();
-            }
+            this.Data();
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    for (int i = 0; i < session.Characters.Count; i++)
+                    {
+                        session.Characters[i] = _context.Characters.Include(c => c.Player)
+                            .SingleOrDefault(c => c.CharacterId == session.Characters[i].CharacterId);
+                    }
                     _context.Update(session);
                     await _context.SaveChangesAsync();
                 }
@@ -117,7 +127,7 @@ namespace HATC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(session);
+            return View("Details", session.SessionId);
         }
 
         // GET: Sessions/Delete/5
@@ -188,7 +198,11 @@ namespace HATC.Controllers
             si.Type = SessionItem.ItemType.Adhoc;
             s.SessionItems.Add(si);
             this.Data();
-            return View("Create", s);
+
+            string view = "Create";
+            if (s.SessionId > 0)
+                view = "Edit";
+            return View(view, s);
         }
 
         [Route("DelAdhoc/{index}")]
@@ -197,7 +211,11 @@ namespace HATC.Controllers
             
             s.SessionItems.RemoveAt(index);
             this.Data();
-            return View("Create", s);
+
+            string view = "Create";
+            if (s.SessionId >= 0)
+                view = "Edit";
+            return View(view, s);
         }
         public IActionResult AddItem(Session s)
         {
@@ -205,7 +223,11 @@ namespace HATC.Controllers
             si.Type = SessionItem.ItemType.Item;
             s.SessionItems.Add(si);
             this.Data();
-            return View("Create", s);
+
+            string view = "Create";
+            if (s.SessionId >= 0)
+                view = "Edit";
+            return View(view, s);
         }
 
         [Route("DelAdhoc/{index}")]
@@ -214,13 +236,21 @@ namespace HATC.Controllers
 
             s.SessionItems.RemoveAt(index);
             this.Data();
-            return View("Create", s);
+
+            string view = "Create";
+            if (s.SessionId >= 0)
+                view = "Edit";
+            return View(view, s);
         }
         public IActionResult AddMonster(Session s)
         {
             s.Monsters.Add(new Monster());
             this.Data();
-            return View("Create", s);
+
+            string view = "Create";
+            if (s.SessionId >= 0)
+                view = "Edit";
+            return View(view, s);
         }
 
         [Route("DelMonster/{index}")]
@@ -228,7 +258,11 @@ namespace HATC.Controllers
         {
             s.Monsters.RemoveAt(index);
             this.Data();
-            return View("Create", s);
+
+            string view = "Create";
+            if (s.SessionId >= 0)
+                view = "Edit";
+            return View(view, s);
         }
         private void Data()
         {
