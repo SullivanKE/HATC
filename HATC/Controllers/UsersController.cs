@@ -140,6 +140,10 @@ namespace HATC.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _context.Users.FindAsync(id);
+            List<Character> characters = _context.Characters.Where(c => c.Player.UserId == id).ToList();
+            foreach (Character c in characters)
+                _context.Characters.Remove(c);
+
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
